@@ -3,11 +3,23 @@ import functions from "./functions";
 import queries from "./queries";
 import oracle from "../db/oracle"
 
-const chatID: string = process.env.CHAT_ID;
-const botToken: string = process.env.BOT_TOKEN;
+const chatID: string = process.env.CHAT_ID || '';
+const botToken: string = process.env.BOT_TOKEN || '';
 const bot = new Telegraf(botToken);
 
 const methods = {
+
+    async onStartApp(name: string) {
+        const check = await queries.healthCheck(name);
+        if (!check || check.appName !== name) {
+            await queries.healthCheckCreate(name);
+        }
+    },
+
+    async healthCheck(name: string) {
+        const check = await queries.healthCheck(name);
+        return check.appName;
+    },
 
     async getStatsData() {
         const initialData = await functions.getInitialData();

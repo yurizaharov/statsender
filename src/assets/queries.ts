@@ -20,7 +20,30 @@ const totalSchema = new Schema({
     totalSummary : Number
 });
 
+const healthSchema = new Schema({
+    appName : String
+});
+
 const queries = {
+
+    async healthCheck(name: string) {
+        const Check = statsConn.model('Check', healthSchema, 'healthcheck');
+        const result = await Check.findOne({ 'appName': name }, function (err: any) {
+            if(err) return console.log(err);
+        });
+        return result;
+    },
+
+    async healthCheckCreate(name: string) {
+        const CheckCreate = statsConn.model('CheckCreate', healthSchema, 'healthcheck');
+        await CheckCreate.findOneAndUpdate({
+            'appName': name
+        }, { 'appName': name },{
+            new: true,
+            upsert: true
+        });
+        console.log(new Date().toLocaleString('ru-RU'), '- Created new record for healthchecking of', name);
+    },
 
     async storeStats(statsData:any, name:string) {
         const Stats = statsConn.model('Stats', statsSchema, name);

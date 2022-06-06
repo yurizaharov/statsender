@@ -1,4 +1,5 @@
 import {NextFunction,Request,Response,Router} from "express";
+import methods from "../assets/methods";
 
 const appRouter = Router();
 
@@ -11,10 +12,11 @@ appRouter
         next();
     })
 
-    .get('/ping', (req:Request, res:Response):void => {
+    .get('/ping', async (req:Request, res:Response) => {
+        const result = await methods.healthCheck('statSender')
         res
             .status(200)
-            .send('StatSender')
+            .send(result)
     })
 
 export default appRouter;
