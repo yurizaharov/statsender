@@ -1,11 +1,12 @@
-import initialData from "../data";
+import fs from "fs";
 
 const dayMilliseconds = 24*60*60*1000;
 
 const functions = {
 
     async getInitialData() {
-        return initialData;
+        const initialData = fs.readFileSync('./dist/data/access.data').toString();
+        return JSON.parse(initialData);
     },
 
     datesToSave() {
