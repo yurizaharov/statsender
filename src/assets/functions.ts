@@ -1,12 +1,21 @@
-import fs from "fs";
+import axios from "axios";
 
+const initialDataHost: string = process.env.CONFIGSERVICE_ADDR || "localhost:8080";
 const dayMilliseconds = 24*60*60*1000;
 
 const functions = {
 
     async getInitialData() {
-        const initialData = fs.readFileSync('./dist/data/access.data').toString();
-        return JSON.parse(initialData);
+        let initialData = [];
+        try {
+            initialData = await axios.get('http://' + initialDataHost + '/api/configs/statsender')
+                .then((response) => {
+                    return response.data;
+                });
+            } catch (err) {
+                console.log(err)
+            }
+        return initialData;
     },
 
     datesToSave() {
