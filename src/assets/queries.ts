@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import statsConn from "../db/mongodb"
 const Schema = mongoose.Schema;
+import logger from "../common/logger"
 
 const statsSchema = new Schema({
     date : String,
@@ -41,14 +42,14 @@ const queries = {
             new: true,
             upsert: true
         });
-        console.log(new Date().toLocaleString('ru-RU'), '- Created new record for healthchecking of', name);
+        logger.info('Created new record for healthchecking of %s', name);
     },
 
     async storeStats(statsData:any, name:string) {
         const Stats = statsConn.model('Stats', statsSchema, name);
         let newRecord = new Stats(statsData);
         newRecord.save();
-        console.log(new Date().toLocaleString('ru-RU'), '- Saved new statistics:', name, statsData.date);
+        logger.info('Saved new statistics: %s %s', name, statsData.date);
     },
 
     async storeStatsQuarterly(statsData:any, name:string) {
@@ -61,14 +62,14 @@ const queries = {
             new: true,
             upsert: true
         });
-        console.log(new Date().toLocaleString('ru-RU'), '- Updated quarterly statistics:', name, statsData.date);
+        logger.info('Updated quarterly statistics: %s %s', name, statsData.date);
     },
 
     async storeTotal(totalData:any) {
         const Total = statsConn.model('Total', totalSchema, 'total');
         let newTotal = new Total(totalData);
         newTotal.save();
-        console.log(new Date().toLocaleString('ru-RU'), '- Saved total statistics:', totalData.date, totalData.totalSummary);
+        logger.info('Saved total statistics: %s %d', totalData.date, totalData.totalSummary);
     },
 
     async storeTotalQuarterly(totalData:any) {
@@ -81,7 +82,7 @@ const queries = {
             new: true,
             upsert: true
         });
-        console.log(new Date().toLocaleString('ru-RU'), '- Updated total statistics:', totalData.date, totalData.totalSummary);
+        logger.info('Updated total statistics: %s %d', totalData.date, totalData.totalSummary);
     },
 
     async readStats(partner:string, dateToRead:any) {
@@ -90,7 +91,7 @@ const queries = {
             'name': partner,
             'date': dateToRead
         });
-        console.log(new Date().toLocaleString('ru-RU'), '- read data for', partner, dateToRead);
+        logger.info('Read data for %s %s', partner, dateToRead);
         return oneStatsRecord;
     },
 
@@ -101,14 +102,14 @@ const queries = {
             'year': yearToRead,
             'quarter': quarterToRead
         });
-        console.log(new Date().toLocaleString('ru-RU'), '- read data for', partner, yearToRead, quarterToRead);
+        logger.info('Read data for %s %d %d', partner, yearToRead, quarterToRead);
         return oneStatsQuarterly;
     },
 
     async readTotal(dateToRead:any) {
         const Total = statsConn.model('total', totalSchema, 'total');
         const totalData = Total.findOne({ date: dateToRead });
-        console.log(new Date().toLocaleString('ru-RU'), '- read total data for', dateToRead);
+        logger.info('Read total data for %s', dateToRead);
         return totalData;
     },
 
@@ -119,7 +120,7 @@ const queries = {
             'year': yearToRead,
             'quarter': quarterToRead
         });
-        console.log(new Date().toLocaleString('ru-RU'), '- read total data for', yearToRead, quarterToRead);
+        logger.info('Read total data for %d %d', yearToRead, quarterToRead);
         return statsTotalQuarterly;
     },
 
