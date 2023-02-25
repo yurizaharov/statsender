@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import logger from "../common/logger"
 
 // Setting variables
 //const statsMongoAdr:string = process.env.MONGO_ADDR || 'localhost'
@@ -7,7 +8,7 @@ const statsMongoDBS:string = process.env.MONGO_DBS || 'statisticsDB'
 
 // Setting instance parameters
 const statsDataUri:string = 'mongodb://' + statsMongoAdr + '/' + statsMongoDBS;
-console.log('MongoDB address set to:', statsDataUri);
+logger.info('MongoDB address set to: %s', statsDataUri);
 
 // Setting mongoose parameters
 const options = {

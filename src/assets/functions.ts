@@ -1,4 +1,5 @@
 import axios from "axios";
+import logger from "../common/logger"
 
 const initialDataHost: string = process.env.CONFIGSERVICE_ADDR || "localhost:8080";
 const dayMilliseconds = 24*60*60*1000;
@@ -13,7 +14,7 @@ const functions = {
                     return response.data;
                 });
             } catch (err) {
-                console.log(err)
+                logger.error(err)
             }
         return initialData;
     },
