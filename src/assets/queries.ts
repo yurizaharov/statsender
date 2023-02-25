@@ -26,19 +26,18 @@ const healthSchema = new Schema({
 
 const queries = {
 
-    async healthCheck(name: string) {
+    healthCheck: async function (name: string) {
         const Check = statsConn.model('Check', healthSchema, 'healthcheck');
-        const result = await Check.findOne({ 'appName': name }, function (err: any) {
-            if(err) return console.log(err);
-        });
-        return result;
+        return Check.findOne({'appName': name});
     },
 
-    async healthCheckCreate(name: string) {
+    healthCheckCreate: async function (name: string) {
         const CheckCreate = statsConn.model('CheckCreate', healthSchema, 'healthcheck');
         await CheckCreate.findOneAndUpdate({
             'appName': name
-        }, { 'appName': name },{
+        }, {
+            'appName': name
+        }, {
             new: true,
             upsert: true
         });
@@ -48,10 +47,8 @@ const queries = {
     async storeStats(statsData:any, name:string) {
         const Stats = statsConn.model('Stats', statsSchema, name);
         let newRecord = new Stats(statsData);
-        newRecord.save(function (err) {
-            if (err) return console.log(err);
-            console.log(new Date().toLocaleString('ru-RU'), '- Saved new statistics:', name, statsData.date);
-        });
+        newRecord.save();
+        console.log(new Date().toLocaleString('ru-RU'), '- Saved new statistics:', name, statsData.date);
     },
 
     async storeStatsQuarterly(statsData:any, name:string) {
@@ -70,10 +67,8 @@ const queries = {
     async storeTotal(totalData:any) {
         const Total = statsConn.model('Total', totalSchema, 'total');
         let newTotal = new Total(totalData);
-        newTotal.save(function (err) {
-            if (err) return console.log(err);
-            console.log(new Date().toLocaleString('ru-RU'), '- Saved total statistics:', totalData.date, totalData.totalSummary);
-        });
+        newTotal.save();
+        console.log(new Date().toLocaleString('ru-RU'), '- Saved total statistics:', totalData.date, totalData.totalSummary);
     },
 
     async storeTotalQuarterly(totalData:any) {
@@ -94,8 +89,6 @@ const queries = {
         const oneStatsRecord = statsRecord.findOne({
             'name': partner,
             'date': dateToRead
-        }, function (err: any) {
-            if(err) return console.log(err);
         });
         console.log(new Date().toLocaleString('ru-RU'), '- read data for', partner, dateToRead);
         return oneStatsRecord;
@@ -107,8 +100,6 @@ const queries = {
             'name': partner,
             'year': yearToRead,
             'quarter': quarterToRead
-        }, function (err: any) {
-            if(err) return console.log(err);
         });
         console.log(new Date().toLocaleString('ru-RU'), '- read data for', partner, yearToRead, quarterToRead);
         return oneStatsQuarterly;
@@ -116,9 +107,7 @@ const queries = {
 
     async readTotal(dateToRead:any) {
         const Total = statsConn.model('total', totalSchema, 'total');
-        const totalData = Total.findOne({ date: dateToRead }, function (err: any) {
-            if(err) return console.log(err);
-        });
+        const totalData = Total.findOne({ date: dateToRead });
         console.log(new Date().toLocaleString('ru-RU'), '- read total data for', dateToRead);
         return totalData;
     },
@@ -129,8 +118,6 @@ const queries = {
             'name': 'total',
             'year': yearToRead,
             'quarter': quarterToRead
-        }, function (err: any) {
-            if(err) return console.log(err);
         });
         console.log(new Date().toLocaleString('ru-RU'), '- read total data for', yearToRead, quarterToRead);
         return statsTotalQuarterly;
