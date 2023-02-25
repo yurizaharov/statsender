@@ -1,5 +1,6 @@
 import fs from "fs";
 import oracledb from "oracledb";
+import logger from "../common/logger"
 
 const oracle = {
 
@@ -23,7 +24,7 @@ const oracle = {
             };
 
         } catch (err) {
-            console.error(err);
+            logger.error(err);
             return {
                 'name' : partner.name,
                 'data' : ''
@@ -33,7 +34,7 @@ const oracle = {
                 try {
                     await connection.close();
                 } catch (err) {
-                    console.error(err);
+                    logger.error(err);
                 }
             }
         }

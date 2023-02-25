@@ -1,6 +1,6 @@
 {
   "name": "statsender",
-  "version": "1.1.1",
+  "version": "1.2.1",
   "description": "Business Statistics Sender",
   "author": "Yury Zakharov",
   "license": "MIT",
@@ -20,6 +20,7 @@
     "express": "^4.18.2",
     "mongoose": "^6.10.0",
     "oracledb": "^5.5.0",
+    "pino": "^8.11.0",
     "telegraf": "^4.11.2"
   },
   "devDependencies": {

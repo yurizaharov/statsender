@@ -18,7 +18,7 @@ const methods = {
 
     async healthCheck(name: string) {
         const check = await queries.healthCheck(name);
-        return check.appName;
+        return check!.appName;
     },
 
     async getStatsData() {
@@ -79,7 +79,7 @@ const methods = {
 
         for (const partner of initialData) {
             let statsDataQuarterly = [];
-            const statsData = await queries.readStats(partner.dataBase, dateToRead);
+            const statsData:any = await queries.readStats(partner.dataBase, dateToRead);
 
             for (let q = 1; q <= 4; q++) {
                 const statsByQuarter = await queries.readStatsQuarterly(partner.dataBase, quartersToRead[q], q);
@@ -118,7 +118,7 @@ const methods = {
 
             telegramMessage += `\n${string1}\n${string2}\n${string3}\n${string4}\n`;
         }
-        const totalData = await queries.readTotal(dateToRead);
+        const totalData:any = await queries.readTotal(dateToRead);
         for (let q = 1; q <= 4; q++) {
             const totalByQuarter = await queries.readTotalQuarterly(quartersToRead[q], q);
             if (totalByQuarter) {
