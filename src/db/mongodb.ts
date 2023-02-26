@@ -8,7 +8,7 @@ const statsMongoDBS:string = process.env.MONGO_DBS || 'statisticsDB'
 
 // Setting instance parameters
 const statsDataUri:string = 'mongodb://' + statsMongoAdr + '/' + statsMongoDBS;
-logger.info('MongoDB address set to: %s', statsDataUri);
+logger.info('MongoDB address is set to: %s', statsDataUri);
 
 // Setting mongoose parameters
 const options = {
