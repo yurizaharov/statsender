@@ -1,10 +1,10 @@
 import fs from "fs";
 import oracledb from "oracledb";
-import logger from "../common/logger"
+import logger from "../common/logger";
 
 const oracle = {
 
-    async sqlRequest (partner:any) {
+    sqlRequest: async function (partner: any) {
         let connection;
         const sqlQuery = fs.readFileSync('./dist/db/sql/quartercurrent.sql').toString();
         try {
@@ -19,15 +19,15 @@ const oracle = {
 
             result = await connection.execute(sqlQuery, binds, options);
             return {
-                'name' : partner.dataBase,
-                'data' : result.rows
+                'name': partner.dataBase,
+                'data': result.rows
             };
 
         } catch (err) {
             logger.error(err);
             return {
-                'name' : partner.name,
-                'data' : ''
+                'name': partner.name,
+                'data': ''
             };
         } finally {
             if (connection) {

@@ -1,10 +1,10 @@
 import mongoose from "mongoose";
-import logger from "../common/logger"
+import logger from "../common/logger";
 
 // Setting variables
 //const statsMongoAdr:string = process.env.MONGO_ADDR || 'localhost'
-const statsMongoAdr:string = process.env.MONGO_ADDR || '192.168.4.231'
-const statsMongoDBS:string = process.env.MONGO_DBS || 'statisticsDB'
+const statsMongoAdr:string = process.env.MONGO_ADDR || '192.168.4.231';
+const statsMongoDBS:string = process.env.MONGO_DBS || 'statisticsDB';
 
 // Setting instance parameters
 const statsDataUri:string = 'mongodb://' + statsMongoAdr + '/' + statsMongoDBS;
