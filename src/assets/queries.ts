@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
-import statsConn from "../db/mongodb"
+import statsConn from "../db/mongodb";
 const Schema = mongoose.Schema;
-import logger from "../common/logger"
+import logger from "../common/logger";
 
 const statsSchema = new Schema({
     date : String,
@@ -45,14 +45,14 @@ const queries = {
         logger.info('Created new record for healthchecking of %s', name);
     },
 
-    async storeStats(statsData:any, name:string) {
+    storeStats: async function (statsData: any, name: string) {
         const Stats = statsConn.model('Stats', statsSchema, name);
         let newRecord = new Stats(statsData);
         newRecord.save();
         logger.info('Saved new statistics: %s %s', name, statsData.date);
     },
 
-    async storeStatsQuarterly(statsData:any, name:string) {
+    storeStatsQuarterly: async function (statsData: any, name: string) {
         const Quarterly = statsConn.model('Quarterly', statsSchema, 'quarterly');
         await Quarterly.findOneAndUpdate({
             'year': statsData.year,
@@ -65,14 +65,14 @@ const queries = {
         logger.info('Updated quarterly statistics: %s %s', name, statsData.date);
     },
 
-    async storeTotal(totalData:any) {
+    storeTotal: async function (totalData: any) {
         const Total = statsConn.model('Total', totalSchema, 'total');
         let newTotal = new Total(totalData);
         newTotal.save();
         logger.info('Saved total statistics: %s %d', totalData.date, totalData.totalSummary);
     },
 
-    async storeTotalQuarterly(totalData:any) {
+    storeTotalQuarterly: async function (totalData: any) {
         const TotalQuarterly = statsConn.model('TotalQuarterly', totalSchema, 'quarterly');
         await TotalQuarterly.findOneAndUpdate({
             'year': totalData.year,
@@ -85,7 +85,7 @@ const queries = {
         logger.info('Updated total statistics: %s %d', totalData.date, totalData.totalSummary);
     },
 
-    async readStats(partner:string, dateToRead:any) {
+    readStats: async function (partner: string, dateToRead: string) {
         const statsRecord = statsConn.model('statsRecord', statsSchema, partner);
         const oneStatsRecord = statsRecord.findOne({
             'name': partner,
@@ -95,7 +95,7 @@ const queries = {
         return oneStatsRecord;
     },
 
-    async readStatsQuarterly(partner:string, yearToRead:number|string, quarterToRead:number) {
+    readStatsQuarterly: async function (partner: string, yearToRead: number, quarterToRead: number) {
         const StatsQuarterly = statsConn.model('StatsQuarterly', statsSchema, 'quarterly');
         const oneStatsQuarterly = StatsQuarterly.findOne({
             'name': partner,
@@ -106,14 +106,14 @@ const queries = {
         return oneStatsQuarterly;
     },
 
-    async readTotal(dateToRead:any) {
+    readTotal: async function (dateToRead: string) {
         const Total = statsConn.model('total', totalSchema, 'total');
-        const totalData = Total.findOne({ date: dateToRead });
+        const totalData = Total.findOne({date: dateToRead});
         logger.info('Read total data for %s', dateToRead);
         return totalData;
     },
 
-    async readTotalQuarterly(yearToRead:number|string, quarterToRead:number) {
+    readTotalQuarterly: async function (yearToRead: number, quarterToRead: number) {
         const TotalQuarterly = statsConn.model('total', totalSchema, 'quarterly');
         const statsTotalQuarterly = await TotalQuarterly.findOne({
             'name': 'total',

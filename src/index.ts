@@ -2,7 +2,7 @@ import express, {Application} from "express";
 import {CronJob} from "cron";
 import router from "./router";
 import methods from "./assets/methods";
-import logger from "./common/logger"
+import logger from "./common/logger";
 
 const app:Application = express();
 const appName: string = 'statSender';
